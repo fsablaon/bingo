@@ -59,11 +59,11 @@ public class Parameters {
 
 	public static class Builder {
 
-		private int range;
-		private int players;
-		private int ticketRow;
-		private int ticketCol;
-		private int numPerRow;
+		private int range = 90;
+		private int players = 5;
+		private int ticketRow = 3;
+		private int ticketCol = 10;
+		private int numPerRow = 5;
 
 		public Builder(){}
 
@@ -92,8 +92,30 @@ public class Parameters {
 			return this;
 		}
 
-		public Parameters build(){
-			//TODO: validate inputs
+		public Parameters build() {
+			//TODO: Are range and numPerRow required to allow for early 5 winType. Assuming no.
+
+			if (range < 1 )
+				throw new IllegalArgumentException("Range less than 0");
+
+			if (players < 1 )
+				throw new IllegalArgumentException("Must have at least 1 player");
+
+			if (ticketRow < 1)
+				throw new IllegalArgumentException("Must have at least 1 row");
+
+			if (ticketCol < 1)
+				throw new IllegalArgumentException("Must have at least 1 col");
+
+			if (numPerRow < 1)
+				throw new IllegalArgumentException("Must have at least 1 number per row");
+
+			if (range < (numPerRow * ticketRow))
+				throw new IllegalArgumentException("Unable to fill tickets. Required Range: " + (numPerRow * ticketRow));
+
+			if (numPerRow > ticketCol)
+				throw new IllegalArgumentException("Unable to fit numbers per row. Column size is too small");
+
 			return new Parameters(this);
 		}
 	}
